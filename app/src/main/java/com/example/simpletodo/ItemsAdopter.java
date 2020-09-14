@@ -13,16 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ItemsAdopter extends RecyclerView.Adapter<ItemsAdopter.ViewHolder>{
 
 
+    public interface OnClickListener{
+        void onItemClicked(int position);
+    }
     public interface OnLongClickListener {
         void onItemLongClicked(int position);
     }
     List<String> items;
     OnLongClickListener longClickListener;
-
-    public ItemsAdopter(List<String> items, OnLongClickListener longClickListener) {
+    OnClickListener clickListener;
+    public ItemsAdopter(List<String> items, OnLongClickListener longClickListener, OnClickListener clickListener) {
 
         this.items = items;
         this.longClickListener= longClickListener;
+        this.clickListener = clickListener;
     }
 
 
@@ -55,6 +59,12 @@ public class ItemsAdopter extends RecyclerView.Adapter<ItemsAdopter.ViewHolder>{
 
         public void bind(String item) {
             tvItem.setText((item));
+            tvItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClicked(getAdapterPosition());
+                }
+            });
             tvItem.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
